@@ -1,0 +1,830 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>🤖 Petualangan Kak Robot - Belajar Algoritma</title>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-pastel: #F0F7FF;
+      --card-bg: #FFFFFF;
+      --primary-blue: #4EA8DE;
+      --accent-yellow: #FFD166;
+      --accent-green: #06D6A0;
+      --accent-pink: #FF70A6;
+      --accent-purple: #B5179E;
+      --text-dark: #2D3142;
+      --text-soft: #4F5D75;
+    }
+
+    * {
+      box-sizing: border-box;
+      user-select: none;
+      -webkit-user-select: none;
+      font-family: 'Fredoka', cursive, sans-serif;
+    }
+
+    body {
+      margin: 0;
+      padding: 12px;
+      background-color: var(--bg-pastel);
+      background-image: radial-gradient(#C4DFAA 2px, transparent 2px), radial-gradient(#90E0EF 2px, transparent 2px);
+      background-size: 32px 32px;
+      background-position: 0 0, 16px 16px;
+      color: var(--text-dark);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+    }
+
+    .app-container {
+      width: 100%;
+      max-width: 850px;
+      background: var(--card-bg);
+      border-radius: 36px;
+      padding: 24px;
+      box-shadow: 0 20px 40px rgba(78, 168, 222, 0.25);
+      border: 8px solid #BEE9E8;
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* TOP SCORE BAR */
+    .top-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #E8F8F5;
+      border: 4px solid #A3E4D7;
+      padding: 8px 20px;
+      border-radius: 50px;
+      margin-bottom: 20px;
+    }
+
+    .score-badge {
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: #D4AC0D;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .nav-actions {
+      display: flex;
+      gap: 10px;
+    }
+
+    .btn-icon {
+      background: white;
+      border: 3px solid #A3E4D7;
+      border-radius: 50%;
+      width: 44px;
+      height: 44px;
+      font-size: 1.3rem;
+      cursor: pointer;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      transition: transform 0.1s, background 0.2s;
+    }
+
+    .btn-icon:active {
+      transform: scale(0.9);
+    }
+
+    /* LAYOUT SCREENS */
+    .screen {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      animation: popIn 0.4s ease-out;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    @keyframes popIn {
+      from { opacity: 0; transform: scale(0.95) translateY(10px); }
+      to { opacity: 1; transform: scale(1) translateY(0); }
+    }
+
+    /* KAK ROBOT ANIMATION */
+    .robot-mascot {
+      font-size: 5rem;
+      margin: 10px 0;
+      display: inline-block;
+      animation: wave 2.5s infinite ease-in-out;
+      cursor: pointer;
+    }
+
+    @keyframes wave {
+      0%, 100% { transform: rotate(0deg) translateY(0); }
+      20% { transform: rotate(-12deg) translateY(-8px); }
+      40% { transform: rotate(12deg) translateY(-8px); }
+      60% { transform: rotate(-6deg) translateY(-4px); }
+      80% { transform: rotate(6deg) translateY(-4px); }
+    }
+
+    h1 {
+      font-size: 2.2rem;
+      color: var(--primary-blue);
+      margin: 5px 0;
+    }
+
+    h2 {
+      font-size: 1.8rem;
+      color: var(--accent-purple);
+      margin: 10px 0;
+    }
+
+    p.speech-bubble {
+      background: #FFF9E6;
+      border: 4px solid var(--accent-yellow);
+      border-radius: 24px;
+      padding: 16px 22px;
+      font-size: 1.3rem;
+      font-weight: 600;
+      color: var(--text-dark);
+      max-width: 600px;
+      margin: 15px 0;
+      position: relative;
+      line-height: 1.5;
+    }
+
+    .btn-large {
+      background: var(--accent-green);
+      color: white;
+      font-size: 1.5rem;
+      font-weight: 700;
+      padding: 16px 36px;
+      border-radius: 50px;
+      border: none;
+      box-shadow: 0 8px 0 #04A77D;
+      cursor: pointer;
+      transition: all 0.1s;
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      margin-top: 15px;
+    }
+
+    .btn-large:active {
+      transform: translateY(6px);
+      box-shadow: 0 2px 0 #04A77D;
+    }
+
+    .btn-secondary {
+      background: var(--primary-blue);
+      box-shadow: 0 8px 0 #3A86C8;
+    }
+
+    .btn-secondary:active {
+      box-shadow: 0 2px 0 #3A86C8;
+    }
+
+    /* CARD CONTAINER */
+    .card-box {
+      background: #F8FAFC;
+      border: 4px solid #E2E8F0;
+      border-radius: 28px;
+      padding: 20px;
+      width: 100%;
+      margin: 12px 0;
+    }
+
+    /* VISUAL ALGORITHM STEPS */
+    .step-flow {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin: 15px 0;
+      font-size: 1.4rem;
+      font-weight: 700;
+    }
+
+    .step-badge {
+      background: white;
+      border: 3px solid var(--primary-blue);
+      border-radius: 20px;
+      padding: 10px 16px;
+      box-shadow: 0 5px 0 #BEE9E8;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .vertical-steps {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      text-align: left;
+      margin: 15px 0;
+    }
+
+    .v-step-item {
+      background: white;
+      border: 3px solid #CBD5E1;
+      border-radius: 18px;
+      padding: 12px 18px;
+      font-size: 1.2rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      box-shadow: 0 4px 0 #E2E8F0;
+      animation: popIn 0.3s ease-out backwards;
+    }
+
+    /* MINI POLL / INTERACTIVE CHOICE */
+    .choice-group {
+      display: flex;
+      justify-content: center;
+      gap: 16px;
+      margin-top: 12px;
+    }
+
+    .btn-choice {
+      background: white;
+      border: 4px solid var(--primary-blue);
+      border-radius: 24px;
+      padding: 12px 28px;
+      font-size: 1.3rem;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 6px 0 #90E0EF;
+      transition: all 0.15s;
+    }
+
+    .btn-choice:active {
+      transform: translateY(4px);
+      box-shadow: 0 2px 0 #90E0EF;
+    }
+
+    /* QUIZ OPTIONS */
+    .quiz-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      width: 100%;
+      margin-top: 15px;
+    }
+
+    .btn-quiz-opt {
+      background: white;
+      border: 4px solid #E2E8F0;
+      border-radius: 22px;
+      padding: 14px 20px;
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--text-dark);
+      cursor: pointer;
+      text-align: left;
+      box-shadow: 0 6px 0 #CBD5E1;
+      transition: all 0.15s;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .btn-quiz-opt:active {
+      transform: translateY(3px);
+      box-shadow: 0 3px 0 #CBD5E1;
+    }
+
+    .btn-quiz-opt.correct {
+      background: #D1FAE5 !important;
+      border-color: var(--accent-green) !important;
+      color: #065F46 !important;
+      box-shadow: 0 6px 0 #A7F3D0 !important;
+    }
+
+    .btn-quiz-opt.wrong {
+      background: #FFF1F2 !important;
+      border-color: var(--accent-pink) !important;
+      color: #9F1239 !important;
+      box-shadow: 0 6px 0 #FECDD3 !important;
+      animation: shake 0.3s;
+    }
+
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      25% { transform: translateX(-8px); }
+      75% { transform: translateX(8px); }
+    }
+
+    /* FEEDBACK TEXT */
+    .feedback-msg {
+      font-size: 1.3rem;
+      font-weight: 700;
+      margin-top: 15px;
+      min-height: 32px;
+    }
+
+    .feedback-msg.correct-txt { color: #059669; }
+    .feedback-msg.wrong-txt { color: #DB2777; }
+
+    /* CONFETTI CANVAS */
+    #confettiCanvas {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 99;
+    }
+
+    /* RESPONSIVE DESIGN */
+    @media (max-width: 600px) {
+      .app-container { padding: 16px; border-radius: 28px; }
+      h1 { font-size: 1.7rem; }
+      h2 { font-size: 1.4rem; }
+      p.speech-bubble { font-size: 1.1rem; padding: 12px; }
+      .btn-large { font-size: 1.25rem; padding: 12px 24px; }
+      .step-badge { font-size: 1.1rem; padding: 8px 12px; }
+      .v-step-item { font-size: 1rem; padding: 10px 12px; }
+      .btn-quiz-opt { font-size: 1.05rem; padding: 12px 14px; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="app-container">
+    <canvas id="confettiCanvas"></canvas>
+
+    <!-- BAR ATAS (SKOR & NAVIGATION) -->
+    <div class="top-header">
+      <div class="score-badge">⭐ Skor: <span id="score-display">0</span></div>
+      <div class="nav-actions">
+        <button class="btn-icon" onclick="toggleAudio()" id="audio-btn" title="Suara">🔊</button>
+        <button class="btn-icon" onclick="goHome()" title="Menu Utama">🏠</button>
+      </div>
+    </div>
+
+    <!-- 1. HALAMAN PEMBUKA -->
+    <div class="screen" id="screen-home">
+      <div class="robot-mascot" onclick="speakRobot()">🤖</div>
+      <h1>Petualangan Kak Robot</h1>
+      <p style="font-size: 1.3rem; color: var(--accent-purple); font-weight: 700; margin-top: -5px;">
+        Belajar Algoritma dengan Cara Menyenangkan! ✨
+      </p>
+
+      <p class="speech-bubble">
+        "Halo, Teman Coding! 👋<br>
+        Hari ini kita belajar <b>ALGORITMA</b>!<br>
+        Algoritma adalah langkah-langkah berurutan untuk menyelesaikan suatu kegiatan."
+      </p>
+
+      <button class="btn-large" onclick="goToScreen('screen-intro')">🚀 MULAI BELAJAR</button>
+    </div>
+
+    <!-- 2. BAGIAN 1: PENGERTIAN ALGORITMA -->
+    <div class="screen hidden" id="screen-intro">
+      <h2>🧠 Apa Itu Algoritma?</h2>
+
+      <p class="speech-bubble">
+        "Algoritma adalah <b>langkah-langkah</b> yang dilakukan secara <b>berurutan</b> untuk menyelesaikan suatu kegiatan. <br><br>
+        Seperti petunjuk jalan, kita harus mengikuti langkahnya satu per satu!"
+      </p>
+
+      <div class="card-box">
+        <p style="font-size: 1.2rem; font-weight: 700; color: var(--primary-blue); margin-bottom: 10px;">
+          Contoh Urutan Langkah Kak Robot:
+        </p>
+        <div class="step-flow">
+          <div class="step-badge">🤖 Kak Robot</div> ➡️
+          <div class="step-badge">1️⃣ Langkah 1</div> ➡️
+          <div class="step-badge">2️⃣ Langkah 2</div> ➡️
+          <div class="step-badge">3️⃣ Langkah 3</div> ➡️
+          <div class="step-badge">🏠 Selesai</div>
+        </div>
+      </div>
+
+      <button class="btn-large" onclick="goToScreen('screen-example1')">👉 LANJUT</button>
+    </div>
+
+    <!-- 3. BAGIAN 2: CONTOH 1 (Menci Tangan) -->
+    <div class="screen hidden" id="screen-example1">
+      <h2>🌟 Contoh Algoritma 1</h2>
+      <p style="font-size: 1.3rem; font-weight: 700; color: var(--accent-purple);">
+        🧼 Mencuci Tangan
+      </p>
+
+      <div class="card-box">
+        <div class="vertical-steps">
+          <div class="v-step-item" style="animation-delay: 0.1s;">1️⃣ 💧 Basahi tangan</div>
+          <div class="v-step-item" style="animation-delay: 0.2s;">2️⃣ 🧼 Gunakan sabun</div>
+          <div class="v-step-item" style="animation-delay: 0.3s;">3️⃣ 👐 Gosok tangan</div>
+          <div class="v-step-item" style="animation-delay: 0.4s;">4️⃣ 🚿 Bilas tangan</div>
+          <div class="v-step-item" style="animation-delay: 0.5s;">5️⃣ 🧻 Keringkan tangan</div>
+        </div>
+      </div>
+
+      <p class="speech-bubble" style="margin: 10px 0;">
+        🤖 "Kita melakukan semua kegiatan sesuai urutan dari atas ke bawah!"
+      </p>
+
+      <button class="btn-large" onclick="goToScreen('screen-example2')">👉 LANJUT CONTOH 2</button>
+    </div>
+
+    <!-- 4. BAGIAN 2: CONTOH 2 (Pergi ke Sekolah) -->
+    <div class="screen hidden" id="screen-example2">
+      <h2>🌟 Contoh Algoritma 2</h2>
+      <p style="font-size: 1.3rem; font-weight: 700; color: var(--accent-purple);">
+        🎒 Pergi ke Sekolah
+      </p>
+
+      <div class="card-box">
+        <div class="vertical-steps">
+          <div class="v-step-item">1️⃣ 🚿 Mandi</div>
+          <div class="v-step-item">2️⃣ 👕 Memakai seragam</div>
+          <div class="v-step-item">3️⃣ 🍚 Sarapan</div>
+          <div class="v-step-item">4️⃣ 🎒 Membawa tas</div>
+          <div class="v-step-item">5️⃣ 🏫 Pergi ke sekolah</div>
+        </div>
+      </div>
+
+      <div class="card-box" style="background: #FFF3BF; border-color: #FFE066;">
+        <p style="font-size: 1.2rem; font-weight: 700; margin: 5px 0;">
+          🤔 Pertanyaan Kak Robot:
+        </p>
+        <p style="font-size: 1.15rem; margin-bottom: 10px;">
+          "Apakah kita bisa pergi ke sekolah sebelum memakai seragam?"
+        </p>
+        <div class="choice-group">
+          <button class="btn-choice" onclick="checkMiniAnswer(false, this)">😊 Ya</button>
+          <button class="btn-choice" onclick="checkMiniAnswer(true, this)">🤔 Tidak</button>
+        </div>
+        <div class="feedback-msg" id="mini-feedback"></div>
+      </div>
+
+      <button class="btn-large hidden" id="btn-to-quiz" onclick="startQuiz()">🎯 MULAI QUIZ</button>
+    </div>
+
+    <!-- 5. BAGIAN 3: QUIZ ALGORITMA -->
+    <div class="screen hidden" id="screen-quiz">
+      <h2>🎯 Misi Quiz Kak Robot</h2>
+      <div class="robot-mascot" style="font-size: 3.5rem; margin: 0;">🤖</div>
+      
+      <p class="speech-bubble" id="quiz-question-txt" style="margin: 10px 0;">
+        Soal Quiz...
+      </p>
+
+      <div class="quiz-grid" id="quiz-options-container">
+        <!-- Pilihan jawaban diisi oleh JS -->
+      </div>
+
+      <div class="feedback-msg" id="quiz-feedback"></div>
+    </div>
+
+    <!-- 6. BAGIAN 4: KESIMPULAN -->
+    <div class="screen hidden" id="screen-summary">
+      <h2>🌈 Yuk, Ingat Lagi!</h2>
+
+      <div class="card-box" style="text-align: left;">
+        <div style="font-size: 1.25rem; font-weight: 700; line-height: 2; color: var(--text-dark);">
+          🧠 <b>1.</b> Algoritma adalah langkah-langkah yang berurutan.<br>
+          👣 <b>2.</b> Kita mengikuti langkah dari awal sampai selesai.<br>
+          🤖 <b>3.</b> Algoritma membantu kita melakukan kegiatan dengan benar.
+        </div>
+      </div>
+
+      <div style="background: var(--accent-yellow); color: #7A5200; padding: 14px 24px; border-radius: 50px; font-size: 1.35rem; font-weight: 700; margin: 15px 0; box-shadow: 0 6px 0 #F59E0B;">
+        ⭐ Algoritma = Langkah yang Berurutan! ⭐
+      </div>
+
+      <div class="step-flow" style="font-size: 1.8rem; margin: 15px 0;">
+        🤖 ➡️ 1️⃣ ➡️ 2️⃣ ➡️ 3️⃣ ➡️ 🎯
+      </div>
+
+      <button class="btn-large" onclick="showFinalResult()">🏆 LIHAT HASIL MISI</button>
+    </div>
+
+    <!-- 7. HALAMAN AKHIR / HASIL -->
+    <div class="screen hidden" id="screen-final">
+      <div class="robot-mascot" style="font-size: 5.5rem;">🎉</div>
+      <h1 style="color: var(--accent-purple);">MISI SELESAI! 🎉</h1>
+
+      <p class="speech-bubble">
+        🤖 "Hebat, Teman Coding!<br>
+        Hari ini kamu sudah belajar tentang algoritma."
+      </p>
+
+      <div class="card-box" style="background: #E8F8F5; border-color: #A3E4D7; max-width: 450px;">
+        <p style="font-size: 1.4rem; font-weight: 700; color: #0E6251; margin: 5px 0;">
+          Total Skor Kamu:
+        </p>
+        <div style="font-size: 3.2rem; font-weight: 700; color: #D4AC0D; margin: 5px 0;">
+          ⭐ <span id="final-score-val">0</span>
+        </div>
+        <p id="final-badge-msg" style="font-size: 1.3rem; font-weight: 700; color: var(--primary-blue); margin: 5px 0;">
+          Pesan Bintang...
+        </p>
+      </div>
+
+      <div style="display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; margin-top: 15px;">
+        <button class="btn-large btn-secondary" onclick="goHome()">🏠 KEMBALI KE MENU</button>
+        <button class="btn-large" onclick="restartQuiz()">🔄 MAIN LAGI</button>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    /* ================= AUDIO SYNTHESIZER (WEB AUDIO API) ================= */
+    let audioEnabled = true;
+    let audioCtx = null;
+
+    function getAudioContext() {
+      if (!audioCtx) {
+        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      }
+      if (audioCtx.state === 'suspended') {
+        audioCtx.resume();
+      }
+      return audioCtx;
+    }
+
+    function playSound(type) {
+      if (!audioEnabled) return;
+      try {
+        const ctx = getAudioContext();
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+
+        const now = ctx.currentTime;
+
+        if (type === 'correct') {
+          osc.type = 'triangle';
+          osc.frequency.setValueAtTime(523.25, now); // C5
+          osc.frequency.setValueAtTime(659.25, now + 0.1); // E5
+          osc.frequency.setValueAtTime(783.99, now + 0.2); // G5
+          gain.gain.setValueAtTime(0.3, now);
+          gain.gain.exponentialRampToValueAtTime(0.01, now + 0.4);
+          osc.start(now);
+          osc.stop(now + 0.4);
+        } else if (type === 'wrong') {
+          osc.type = 'sawtooth';
+          osc.frequency.setValueAtTime(280, now);
+          osc.frequency.setValueAtTime(220, now + 0.12);
+          gain.gain.setValueAtTime(0.25, now);
+          gain.gain.exponentialRampToValueAtTime(0.01, now + 0.3);
+          osc.start(now);
+          osc.stop(now + 0.3);
+        } else if (type === 'win') {
+          const notes = [523.25, 659.25, 783.99, 1046.50];
+          notes.forEach((freq, idx) => {
+            const o = ctx.createOscillator();
+            const g = ctx.createGain();
+            o.connect(g);
+            g.connect(ctx.destination);
+            o.frequency.value = freq;
+            g.gain.setValueAtTime(0.2, now + idx * 0.12);
+            g.gain.exponentialRampToValueAtTime(0.01, now + idx * 0.12 + 0.25);
+            o.start(now + idx * 0.12);
+            o.stop(now + idx * 0.12 + 0.25);
+          });
+        } else if (type === 'pop') {
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(400, now);
+          osc.frequency.exponentialRampToValueAtTime(800, now + 0.08);
+          gain.gain.setValueAtTime(0.2, now);
+          gain.gain.exponentialRampToValueAtTime(0.01, now + 0.08);
+          osc.start(now);
+          osc.stop(now + 0.08);
+        }
+      } catch (e) {
+        console.log("Audio waiting for interaction");
+      }
+    }
+
+    function toggleAudio() {
+      audioEnabled = !audioEnabled;
+      document.getElementById('audio-btn').textContent = audioEnabled ? '🔊' : '🔇';
+    }
+
+    function speakRobot() {
+      playSound('pop');
+    }
+
+    /* ================= GAME DATA (QUIZ SOAL) ================= */
+    const quizData = [
+      {
+        q: "Soal 1: Kegiatan mana yang dilakukan pertama saat mencuci tangan?",
+        opts: [
+          { text: "A. 🧼 Menggunakan sabun", correct: false },
+          { text: "B. 💧 Membasahi tangan", correct: true },
+          { text: "C. 🧻 Mengeringkan tangan", correct: false }
+        ],
+        hintWrong: "😊 Coba lagi! Ingat langkah pertama."
+      },
+      {
+        q: "Soal 2: Setelah mandi, apa yang kita lakukan?",
+        opts: [
+          { text: "A. 👕 Memakai pakaian", correct: true },
+          { text: "B. 🛏️ Tidur", correct: false },
+          { text: "C. 🏫 Pergi sekolah", correct: false }
+        ],
+        hintWrong: "Ayo pikirkan kembali! Sebelum sekolah kita berpakaian dulu."
+      },
+      {
+        q: "Soal 3: Urutan yang benar untuk pergi ke sekolah adalah...",
+        opts: [
+          { text: "A. 🏫 Sekolah → 👕 Seragam → 🚿 Mandi", correct: false },
+          { text: "B. 🚿 Mandi → 👕 Seragam → 🎒 Tas → 🏫 Sekolah", correct: true },
+          { text: "C. 🎒 Tas → 🏫 Sekolah → 🚿 Mandi", correct: false }
+        ],
+        hintWrong: "Hampir benar! Cari urutan dari mandi dulu ya."
+      },
+      {
+        q: "Soal 4: Robot ingin pergi ke rumah 🤖 ➡️ ➡️ 🏠. Langkah pertama adalah...",
+        opts: [
+          { text: "A. 🏠 Sampai rumah", correct: false },
+          { text: "B. ➡️ Bergerak maju", correct: true },
+          { text: "C. 😴 Tidur", correct: false }
+        ],
+        hintWrong: "Kamu pasti bisa! Supaya jalan, robot harus bergerak maju dulu."
+      },
+      {
+        q: "Soal 5: Mana urutan makan yang benar? 🍞 → 🥄 → 😋",
+        opts: [
+          { text: "A. Makan → Ambil makanan → Duduk", correct: false },
+          { text: "B. Duduk → Ambil makanan → Makan", correct: true },
+          { text: "C. Makan → Tidur → Ambil makanan", correct: false }
+        ],
+        hintWrong: "Coba lagi! Kita duduk dulu dengan rapi sebelum makan."
+      }
+    ];
+
+    /* ================= GAME STATE & CONTROL ================= */
+    let currentScore = 0;
+    let quizIndex = 0;
+
+    function updateScoreUI() {
+      document.getElementById('score-display').textContent = currentScore;
+    }
+
+    function goToScreen(screenId) {
+      playSound('pop');
+      document.querySelectorAll('.screen').forEach(s => s.classList.add('hidden'));
+      document.getElementById(screenId).classList.remove('hidden');
+    }
+
+    function goHome() {
+      goToScreen('screen-home');
+    }
+
+    /* --- CONTOH 2 MINI INTERACTION --- */
+    function checkMiniAnswer(isNo, btnEl) {
+      const fb = document.getElementById('mini-feedback');
+      if (isNo) {
+        playSound('correct');
+        fb.textContent = "🎉 Benar! Kita harus memakai seragam dulu sebelum berangkat!";
+        fb.className = "feedback-msg correct-txt";
+        document.getElementById('btn-to-quiz').classList.remove('hidden');
+      } else {
+        playSound('wrong');
+        fb.textContent = "😊 Kak Robot nanti malu kalau belum pakai seragam! Coba pilih 'Tidak'.";
+        fb.className = "feedback-msg wrong-txt";
+      }
+    }
+
+    /* --- QUIZ SYSTEM --- */
+    function startQuiz() {
+      quizIndex = 0;
+      loadQuizQuestion();
+      goToScreen('screen-quiz');
+    }
+
+    function restartQuiz() {
+      currentScore = 0;
+      updateScoreUI();
+      startQuiz();
+    }
+
+    function loadQuizQuestion() {
+      document.getElementById('quiz-feedback').textContent = '';
+      document.getElementById('quiz-feedback').className = 'feedback-msg';
+
+      const data = quizData[quizIndex];
+      document.getElementById('quiz-question-txt').innerHTML = `🤖 "<b>${data.q}</b>"`;
+
+      const container = document.getElementById('quiz-options-container');
+      container.innerHTML = '';
+
+      data.opts.forEach((opt) => {
+        const btn = document.createElement('button');
+        btn.className = 'btn-quiz-opt';
+        btn.textContent = opt.text;
+        btn.onclick = () => handleAnswer(opt, btn);
+        container.appendChild(btn);
+      });
+    }
+
+    function handleAnswer(selectedOpt, btnEl) {
+      const data = quizData[quizIndex];
+      const feedbackEl = document.getElementById('quiz-feedback');
+
+      if (selectedOpt.correct) {
+        btnEl.classList.add('correct');
+        playSound('correct');
+        currentScore += 10;
+        updateScoreUI();
+
+        feedbackEl.textContent = "🎉 Hebat! Jawabanmu benar! (+10 ⭐)";
+        feedbackEl.className = "feedback-msg correct-txt";
+
+        disableQuizBtns();
+
+        setTimeout(() => {
+          quizIndex++;
+          if (quizIndex < quizData.length) {
+            loadQuizQuestion();
+          } else {
+            goToScreen('screen-summary');
+          }
+        }, 1300);
+
+      } else {
+        btnEl.classList.add('wrong');
+        playSound('wrong');
+
+        feedbackEl.textContent = data.hintWrong;
+        feedbackEl.className = "feedback-msg wrong-txt";
+      }
+    }
+
+    function disableQuizBtns() {
+      document.querySelectorAll('.btn-quiz-opt').forEach(b => b.style.pointerEvents = 'none');
+    }
+
+    /* --- FINAL RESULT --- */
+    function showFinalResult() {
+      playSound('win');
+      document.getElementById('final-score-val').textContent = currentScore;
+
+      const badgeMsg = document.getElementById('final-badge-msg');
+      if (currentScore >= 50) {
+        badgeMsg.textContent = "🏆 LUAR BIASA! Kamu adalah Jagoan Algoritma!";
+      } else {
+        badgeMsg.textContent = "🌟 Bagus Sekali! Terus berlatih ya agar semakin pintar!";
+      }
+
+      goToScreen('screen-final');
+      launchConfetti();
+    }
+
+    /* --- CONFETTI ANIMATION --- */
+    function launchConfetti() {
+      const canvas = document.getElementById('confettiCanvas');
+      const ctx = canvas.getContext('2d');
+      canvas.width = canvas.parentElement.clientWidth;
+      canvas.height = canvas.parentElement.clientHeight;
+
+      const particles = [];
+      const colors = ['#FFD166', '#06D6A0', '#4EA8DE', '#FF70A6', '#B5179E'];
+
+      for (let i = 0; i < 60; i++) {
+        particles.push({
+          x: Math.random() * canvas.width,
+          y: Math.random() * canvas.height - canvas.height,
+          size: Math.random() * 8 + 6,
+          color: colors[Math.floor(Math.random() * colors.length)],
+          speedY: Math.random() * 3 + 2,
+          speedX: Math.random() * 2 - 1
+        });
+      }
+
+      let frame = 0;
+      function renderConfetti() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        particles.forEach(p => {
+          p.y += p.speedY;
+          p.x += p.speedX;
+          ctx.fillStyle = p.color;
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, p.size / 2, 0, Math.PI * 2);
+          ctx.fill();
+        });
+
+        frame++;
+        if (frame < 130) {
+          requestAnimationFrame(renderConfetti);
+        } else {
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
+        }
+      }
+      renderConfetti();
+    }
+  </script>
+</body>
+</html>
